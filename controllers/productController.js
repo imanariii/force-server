@@ -6,11 +6,11 @@ const ApiError = require('../error/ApiError');
 class ProductController {
     async create(req, res, next) {
         try {
-            let {name, price, brandId, categoryId, info} = req.body
+            let {name, price, count, categoryId, brandId, info} = req.body
             const {img} = req.files
             let fileName = uuid.v4() + ".jpg"
-            img.mv(path.resolve(__dirname, '..', 'static', fileName))
-            const product = await Product.create({name, price, brandId, categoryId, img: fileName});
+            await img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            const product = await Product.create({name, price, brandId, count, categoryId, img: fileName});
 
             if (info) {
                 info = JSON.parse(info)
@@ -33,7 +33,7 @@ class ProductController {
     async getAll(req, res) {
         let {brandId, categoryId, limit, page} = req.query
         page = page || 1
-        limit = limit || 9
+        limit = limit || 3
         let offset = page * limit - limit
         let products;
         if (!brandId && !categoryId) {
@@ -66,6 +66,20 @@ class ProductController {
         const product = await Product.destroy({
             where: {id}
         })
+        return res.json(product)
+    }
+
+    async update(req, res) {
+        let {name, price, count} = req.body
+        const {id} = req.params
+
+        const product = await Product.update({ name, price, count},
+          {
+              where: {
+                  id: id,
+              },
+          }
+        )
         return res.json(product)
     }
 }
