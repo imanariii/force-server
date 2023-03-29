@@ -5,7 +5,9 @@ class OrderController {
   async create(req, res, next) {
     try {
       let {productId, price, address } = req.body
-      const order = await Orders.create({productId, price, address});
+      const userId = req.user.id
+
+      const order = await Orders.create({productId, price, address, userId})
       return res.json(order)
     } catch (e) {
       next(ApiError.badRequest(e.message))

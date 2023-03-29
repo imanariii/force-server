@@ -3,7 +3,8 @@ const {DataTypes} = require('sequelize')
 
 const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    email: {type: DataTypes.STRING, unique: true,},
+    email: {type: DataTypes.STRING, unique: true},
+    address: {type: DataTypes.STRING, defaultValue: 'Адрес не задан'},
     password: {type: DataTypes.STRING},
     role: {type: DataTypes.STRING, defaultValue: "USER"},
 })
@@ -13,12 +14,12 @@ const Orders = sequelize.define('orders', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     productId: {type: DataTypes.INTEGER},
     price: {type: DataTypes.INTEGER, allowNull: false},
-    address: {type: DataTypes.STRING}
+    userId: {type: DataTypes.INTEGER}
 })
 
 const Product = sequelize.define('product', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, unique: true, allowNull: false, minLength: 6},
     price: {type: DataTypes.INTEGER, allowNull: false},
     count: {type: DataTypes.INTEGER, defaultValue: 1},
     img: {type: DataTypes.STRING, allowNull: false},
@@ -26,12 +27,12 @@ const Product = sequelize.define('product', {
 
 const Brand = sequelize.define('brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, unique: true, allowNull: false, minLength: 4},
 })
 
 const Category = sequelize.define('category', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, unique: true, allowNull: false, minLength: 4},
 })
 
 const ProductInfo = sequelize.define('product_info', {
@@ -44,7 +45,7 @@ const BrandCategory = sequelize.define('brand_category', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-User.hasOne(Orders)
+User.hasMany(Orders);
 Orders.belongsTo(User)
 
 Brand.hasMany(Product)

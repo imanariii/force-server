@@ -1,6 +1,6 @@
 const uuid = require('uuid')
 const path = require('path');
-const {Product, ProductInfo} = require('../models/models')
+const {Product, ProductInfo, Orders } = require('../models/models')
 const ApiError = require('../error/ApiError');
 
 class ProductController {
@@ -33,7 +33,7 @@ class ProductController {
     async getAll(req, res) {
         let {brandId, categoryId, limit, page} = req.query
         page = page || 1
-        limit = limit || 3
+        limit = limit || 2
         let offset = page * limit - limit
         let products;
         if (!brandId && !categoryId) {
