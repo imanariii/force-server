@@ -3,11 +3,11 @@ const ApiError = require('../error/ApiError');
 
 class CategoryController {
     async create(req, res, next) {
-        const {name} = req.body
-        if(name.length > 4) {
+        const {name, description} = req.body
+        if(name.length < 4) {
             return next(ApiError.badRequest('Длина наименования должна быть больше 4'))
         }
-        const brand = await Category.create({name})
+        const brand = await Category.create({name, description})
         return res.json(brand)
     }
 

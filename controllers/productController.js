@@ -61,6 +61,7 @@ class ProductController {
         )
         return res.json(product)
     }
+
     async delete(req, res) {
         const {id} = req.params
         const product = await Product.destroy({
